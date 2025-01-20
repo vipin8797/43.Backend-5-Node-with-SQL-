@@ -10,8 +10,9 @@ const connection = mysql.createConnection({ //establishing connection with MySQL
 });
 
 //queries
+const q = "SHOW TABLES";
 try{
-    connection.query("SHOW TABLES",(err,result)=>{
+    connection.query(q,(err,result)=>{
         if(err) throw err;
         console.log(result);
     })
