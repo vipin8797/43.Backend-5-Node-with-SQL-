@@ -1,5 +1,29 @@
 // const express = require('express');
 // const app = express();
+const mysql = require('mysql2');//requering mysql2
+
+const connection = mysql.createConnection({ //establishing connection with MySQL Database
+    host:'localhost',
+    user:'root',
+    database:'delta_app',
+    password:"Xenon@56",
+});
+
+//queries
+try{
+    connection.query("SHOW TABLES",(err,result)=>{
+        if(err) throw err;
+        console.log(result);
+    })
+}catch(err){
+    console.log(err);
+}finally{
+    connection.end();
+}
+
+
+
+
 
 //Requiring faker
 const { faker } = require('@faker-js/faker');
@@ -14,7 +38,7 @@ const getData = ()=> {
   }
 
 
-  console.log(getData());
+//   console.log(getData());
 
 
 
