@@ -200,6 +200,30 @@ try{
 
 
 
+//delet request
+app.delete("/user/:id/delete",(req,res)=>{
+    const {id} = req.params;
+    const q1 = `SELECT * FROM users WHERE id = "${id}"`;
+try{
+    connection.query(q1,(err,result)=>{
+        if(err) throw err;
+        const data = result[0];
+      
+
+const q2 = `DELETE FROM users WHERE id = "${id}"`;
+connection.query(q2,(err,result)=>{
+    if(err) throw err;
+    res.redirect('/show');
+  
+});
+
+
+    })
+}catch(err){
+    console.log(err);
+}
+})
+    
 
 
 
