@@ -111,13 +111,28 @@ app.get('/',(req,res)=>{
     }catch(err){
         console.log(err);
         res.send("Something error in DB");
-    }finally{
-        connection.end();
     }
 
 
 })
 
+
+
+app.get('/show',(req,res)=>{
+    let q = "SELECT * FROM users";
+    try{
+        connection.query(q,(err,result)=>{
+            if(err) throw err;
+            res.render("show.ejs",{result});
+            
+           
+        })
+    }catch(err){
+        console.log(err);
+        res.send("Something error in DB");
+    }
+
+})
 
 
 
