@@ -1,5 +1,12 @@
-// const express = require('express');
-// const app = express();
+const express = require('express');
+const app = express();
+
+//Requiring Path for EJS files
+const path = require('path');
+app.set('views engine','ejs');
+//Default Path for views folder
+app.set("views",path.join(__dirname,"views"));
+
 
 //Requiring faker
 const { faker } = require('@faker-js/faker');
@@ -67,32 +74,49 @@ const connection = mysql.createConnection({ //establishing connection with MySQL
 
 
 
-//insertin Bulk data using Faker
-const q = 'INSERT INTO users (id,username,email,password) VALUES ?';
-const userData = []
-for(let i=0; i<=100; i++){
-    userData.push(getData());
-};
+// //insertin Bulk data using Faker
+// const userData = []
+// for(let i=0; i<=100; i++){
+//     userData.push(getData());
+// };
 
-try{
-    connection.query(q,[userData],(err,result)=>{
-        if(err) throw err;
-        console.log(result);
-    })
-}catch(err){
-    console.log(err)
+// const q = 'INSERT INTO users (id,username,email,password) VALUES ?';
+// try{
+//     connection.query(q,[userData],(err,result)=>{
+//         if(err) throw err;
+//         console.log(result);
+//     })
+// }catch(err){
+//     console.log(err)
 
-}finally{
-    connection.end();
-}
-
-
+// }finally{
+//     connection.end();
+// }
 
 
 
 
 
 
+//****************** */ Routes Starts Frome Here.
+app.get('/',(req,res)=>{
+    let q = "SELECT count(*) FROM users";
+    try{
+        connection.query(q,(err,result)=>{
+            if(err) throw err;
+            let count = result[0]["count(*)"];
+            res.render("home.ejs",{count});
+           
+        })
+    }catch(err){
+        console.log(err);
+        res.send("Something error in DB");
+    }finally{
+        connection.end();
+    }
+
+
+})
 
 
 
@@ -105,7 +129,13 @@ try{
 
 
 
-// const port = 3000;
-// app.listen(port,()=>{
-//     console.log(`listening at port ${port}`);
-// })
+
+
+
+
+
+
+const port = 3000;
+app.listen(port,()=>{
+    console.log(`listening at port ${port}`);
+})
