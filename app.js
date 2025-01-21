@@ -7,6 +7,15 @@ app.set('views engine','ejs');
 //Default Path for views folder
 app.set("views",path.join(__dirname,"views"));
 
+//Data Parsing for POST Request
+app.use(express.urlencoded({extended:true}));
+
+
+//Requiring Method Override
+const methodOverride = require('method-override')
+app.use(methodOverride('_method'));
+
+
 
 //Requiring faker
 const { faker } = require('@faker-js/faker');
@@ -135,7 +144,59 @@ app.get('/show',(req,res)=>{
 })
 
 
+//Get Req for Edit Form
+app.get('/user/:id/edit',(req,res)=>{
+    const {id} = req.params;
+    let q = `SELECT * FROM users WHERE id='${id}'`
+    try{
+        connection.query(q,(err,result)=>{
+            if(err) throw err;
+            const data = result[0];
+            console.log(data);
+            res.render("edit.ejs",{data});
+       
+        })
+    }catch(err){
+        console.log(err);
+        res.send("Something error in DB");
+    }
+});
 
+//Patch req to Update db
+app.patch('/user/:id',(req,res)=>{
+    const {id} = req.params;
+    const {password,username} = req.body;
+    // console.log(password);
+    // console.log(id);
+
+const q1 = `SELECT * FROM users WHERE id = "${id}"`;
+try{
+    connection.query(q1,(err,result)=>{
+        if(err) throw err;
+        const data = result[0];
+        
+        
+   
+   //second query
+   const q2 = `UPDATE users SET username = "${username}" WHERE id = "${id}"`;
+   
+    connection.query(q2,(err,result)=>{
+        if(err) throw err;
+
+        if(password == data.password){ //matching passord
+        res.redirect('/show');
+        }else{
+            res.send("wrong passord");
+        }
+   
+    }) ;  
+   
+    });
+}catch(err){
+    console.log(err);
+}
+
+});
 
 
 

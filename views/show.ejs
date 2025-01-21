@@ -29,6 +29,9 @@
                 <td><%= user.id %></td>
                 <td><%= user.username %></td>
                 <td><%= user.email %></td>
+                <td>
+                    <a href="/user/<%=user.id%>/edit">Edit</a>
+                </td>           
             </tr>
         <% } %>
     </table>
